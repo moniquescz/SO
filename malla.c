@@ -9,40 +9,33 @@ int main(){
     int contx = 0;
     printf("Inserte el valor X: ");
     scanf("%d",&x);
-    printf("INserte el valor Y: ");
+    printf("Inserte el valor Y: ");
     scanf("%d",&y);
-    /*pid_t nombres[x][y];
-    for(int i = 0; i < x; i++){
-        for(int j = 0; j < y; j++){
-            if (malla>0){
-            nombres[i][j] = fork();
-            sleep(10);
-            }
-        }
-    }*/
 
     int ppid = getpid();
+    int newppid = getpid();
     malla = fork();
+    for (int i=0; i<x-1; i++){
+	 if (getppid()==newppid){
+		    newppid=getpid();
+	   	 fork();
+		}
+
+	}
+
 
     for(int i = 0; i < y - 1;i++){
 
         if (getpid() == ppid && malla > 0 ){
-            fork();
-
-        }
-
-        
-    }
-    for(int i = 0; i  < x - 1;i++){
-        
-        if(getpid() != ppid){
-            fork();
-        }
-    }
-
+		newppid = getpid();
+		fork();
+            	for (int i=0; i<x-1; i++){
+			if (getppid()==newppid){
+				newppid=getpid();
+				fork();
+        		}
+    		}
+	}
+    }	
     sleep(20);
-
-    
-    
-
 }
