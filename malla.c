@@ -33,6 +33,12 @@ int main(){
 
         
     }
+    for(int i = 0; i  < x - 1;i++){
+        
+        if(getpid() != ppid){
+            fork();
+        }
+    }
 
     sleep(20);
 
