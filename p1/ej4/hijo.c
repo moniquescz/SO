@@ -19,16 +19,23 @@ int main(int argc, char *argv[]){
         x = atoi(argv[1]);
         y = atoi(argv[2]);
     }
-    int pidx[x+1]; //Lista con todos los pids de x, se compartirá por memoria para poder enviar los mensajes
-    int pidy[y]; //Lo mismo 
-    int shmid;
+    int nx = x + 1;
+    int ny = y;
+    int *pidx; //Lista con todos los pids de x, se compartirá por memoria para poder enviar los mensajes
+    int *pidy; //Lo mismo 
+    int shmidx,shmidy;
 
     //Compartimos las variables pidx y pidy
-    if((shmid=shmget(IPC_PRIVATE,sizeof(pidx),IPC_CREAT|0666))==-1){
+    if((shmidx=shmget(IPC_PRIVATE,sizeof(int)*nx,IPC_CREAT|0777))==-1){
         perror("Error al crear la memoria compartida: \n");
         return 1;
     }
-    //pidx = (int *) shmat (shmid,0,0);
+    pidx = (int *) shmat (shmidx,0,0);
+    if((shmidy=shmget(IPC_PRIVATE,sizeof(int)*ny,IPC_CREAT|0777))==-1){
+        perror("Error al crear la memoria compartida: \n");
+        return 1;
+    }
+    pidy = (int *) shmat (shmidy,0,0);
 
 
 
@@ -64,7 +71,7 @@ int main(int argc, char *argv[]){
             printf("%d \n",pidx[i]);
         }
     }
-int malla, newppid;
+/*int malla, newppid;
     for (int i=0;i<y;i++){
             if (i==0 && getpid()==ultimo){
                 malla = fork();
@@ -73,8 +80,14 @@ int malla, newppid;
                 fork();
             }
         }
-
+*/
     
+
+
+    //printar mensajes
+    if(getpid() == pidx[0]){
+        
+    }
     
    
     
