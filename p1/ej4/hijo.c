@@ -105,6 +105,13 @@ int main(int argc, char *argv[]){
    if(getpid() == pidy[y-1])
         printf("Finalizando programa... \n");
     sleep(5);
+
+
+    shmdt((char * )pidx);
+    shmctl(shmidx,IPC_RMID,0);
+    shmdt((char * )pidy);
+    shmctl(shmidy,IPC_RMID,0);
+
     exit(0);
 
 }
