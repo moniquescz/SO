@@ -37,15 +37,6 @@ int main(int argc, char *argv[]){
     }
     pidy = (int *) shmat (shmidy,0,0);
 
-
-
-    //Crear hijos y
-    /*for (int i=0;i<x-1;i++){
-        if (ppid = getppid()){
-            ppid = fork();
-        }
-        
-    }*/
     pidx[0] = getpid(); //Pid Padre guardado en 0
 
     
@@ -55,8 +46,8 @@ int main(int argc, char *argv[]){
             if(pidx[0] != getpid())
                 pidx[i+1] = getpid(); //Primer hijo guardado en [1]
         }else if (ppid == 0){
-            if(getpid() != pidx[i])
-                pidx[i+1] = getpid(); //Guarda hijo que entra hasta posición x - 1
+            if(getpid() != pidx[0])
+                pidx[i] = getpid(); //Guarda hijo que entra hasta posición x - 1
 			ppid=fork();
             if(getpid() != pidx[x-1] && i == x-1)
                 pidx[x] = getpid();
@@ -65,32 +56,55 @@ int main(int argc, char *argv[]){
             }
 		}
     }	
-
+    //Creación y
+    sleep(1);
     if(getpid() == pidx[x]){
-        for (int i=0;i<x + 1;i++){
-            printf("%d \n",pidx[i]);
-        }
-    }
-/*int malla, newppid;
-    for (int i=0;i<y;i++){
-            if (i==0 && getpid()==ultimo){
-                malla = fork();
-            } else if (getpid() == ppid && malla > 0 ){
-                newppid = getpid();
-                fork();
+        printf("Un momento, estoy creando los hijos... \n");
+        for (int i=0;i<y;i++){
+            if (getppid()!=pidx[x]){
+                int aux = fork();
+                if(aux == 0)
+                    pidy[i] = getpid();
             }
         }
-*/
+    }
+    //Segundos para comprobar el árbol
+    sleep(5);
     
 
 
     //printar mensajes
     if(getpid() == pidx[0]){
-        
+        printf("I am the superfather(%d):my final children are:",getpid());
+        for(int i = 0; i < ny;i++){
+            if(i != ny - 1){
+                printf("%d,",pidy[i]);
+            }
+            if(i == ny - 1){
+                printf("%d \n",pidy[i]);
+            }
+        }
+
+    }
+
+    for(int i = 0; i < ny;i++){
+        if(getpid() == pidy[i]){
+            printf("I am the subchild %d, my parents are:",getpid());
+            for(int i = 0; i < nx; i++){
+                if(i != 0 && i != nx - 1){
+                    printf("%d,",pidx[i]);
+                }
+                if(i == nx-1){
+                    printf("%d \n",pidx[i]);
+                }
+            }
+        }
     }
     
-   
-    
-    sleep(15);
+   //Segundos para poder comprobar que los mensajes y los pid coincides con los del árbol
+   if(getpid() == pidy[y-1])
+        printf("Finalizando programa... \n");
+    sleep(5);
+    exit(0);
 
 }
